@@ -15,7 +15,7 @@ console.log(data);
 
 const showMsg = () => {
   // eslint-disable-next-line
-    alert('Hello');
+  alert('Hello');
 };
 
 // 挂载到全局作用域
