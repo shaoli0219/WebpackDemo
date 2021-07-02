@@ -11,6 +11,9 @@ import data from './data.json';
 import './css/main.css';
 import './css/main.less';
 
+// 引入图片
+import cartNano from './image/cartNano.png';
+
 console.log(data);
 
 const showMsg = () => {
@@ -31,3 +34,10 @@ const p = new Promise(
   },
 );
 console.log(p);
+
+// eslint-disable-next-line
+const img = new Image();
+img.src = cartNano;
+
+// eslint-disable-next-line
+document.body.append(img);

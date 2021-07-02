@@ -8,15 +8,14 @@
     <title>
         <%= htmlWebpackPlugin.options.title %>
     </title>
-    <link rel="stylesheet" type="text/css" href="" />
-    <style type="text/css">
-    </style>
 </head>
 
 <body>
     <h1 onclick="showMsg()">Hello Webpack</h1>
     <a href="index.html">首页</a>
     <a href="about.html">关于</a>
+    <img src="<%= require('./image/headimg.png') %>">
+    <img src="<%= require('./image/store.png') %>">
 </body>
 
 </html>

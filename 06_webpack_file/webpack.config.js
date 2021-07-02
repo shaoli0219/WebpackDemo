@@ -35,7 +35,13 @@ module.exports = {
                     // 'style-loader',
 
                     // 3、将css打包到独立文件中
-                    MiniCssExtractPlugin.loader,
+                    // MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../'
+                        }
+                    },
 
                     // 2、css-loader按照CommonJS规范，将样式文件输出到js中
                     'css-loader',
@@ -52,7 +58,13 @@ module.exports = {
                     // 'style-loader',
 
                     // 4、将css打包到独立文件中
-                    MiniCssExtractPlugin.loader,
+                    // MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../'
+                        }
+                    },
 
                     // 3、css-loader按照CommonJS规范，将样式文件输出到js中
                     'css-loader',
@@ -64,6 +76,35 @@ module.exports = {
                     'less-loader'
 
                 ]
+            },
+            // 处理图片
+            {
+                test: /\.(png|jpe?g)$/i,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        // 指定图片大小，小于该数据的图片，会被转成base64
+                        limit: 8 * 1024,//8kb
+                        // [name]是图片原名称
+                        // [ext]是图片原后缀名
+                        name: 'image/[name].[ext]',
+                        // url-loader 默认采用 ES modules 规范进行解析，但是 html-loader 引入使用的是 commonJs 规范
+                        // 解决：关闭 url-loader 默认的 ES modules 规范,强制 url-loader 使用 CommonJS 规范打包
+                        esModule: false,
+                    }
+                }
+            },
+            // 处理html
+            {
+                test: /\.(htm|html)$/i,
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        // webpack@4 只需要在 url-loader 配置 esModele:false
+                        // webpack@5 需要在 html-loader 中，也配置 esModele:false
+                        esModule: false,
+                    }
+                }
             },
             {
                 test: /\.m?js$/,
@@ -113,7 +154,7 @@ module.exports = {
             // 指定打包后的文件名称
             filename: 'index.html',
             // 用来指定生成html的模板
-            template: './src/index.html',
+            template: './src/index.ejs',
             // 指定html中使用的变量
             title: 'Webpack Demo'
         }),
@@ -121,7 +162,7 @@ module.exports = {
             // 指定打包后的文件名称
             filename: 'about.html',
             // 用来指定生成html的模板
-            template: './src/index.html',
+            template: './src/index.ejs',
             // 指定html中使用的变量
             title: '关于我们',
             // html压缩
