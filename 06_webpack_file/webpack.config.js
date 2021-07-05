@@ -7,6 +7,8 @@ const StylelintPlugin = require('stylelint-webpack-plugin')
 const OptimizeCssAssetPlugin = require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     // 模式
@@ -91,6 +93,16 @@ module.exports = {
                         // url-loader 默认采用 ES modules 规范进行解析，但是 html-loader 引入使用的是 commonJs 规范
                         // 解决：关闭 url-loader 默认的 ES modules 规范,强制 url-loader 使用 CommonJS 规范打包
                         esModule: false,
+                    }
+                }
+            },
+            // 匹配字体文件
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/i,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'fonts/[name].[ext]',
                     }
                 }
             },
@@ -179,7 +191,18 @@ module.exports = {
         new ESLintPlugin({
             // 自动解决常规代码格式报错
             fix: true
-        })
+        }),
+        // 直接将src不需要处理的文件输出到目标文件
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: 'src/public',
+                    to: 'public'
+                }
+            ]
+        }),
+        // 打包之前删除历史文件
+        new CleanWebpackPlugin()
     ],
 
     // 开发服务器
