@@ -82,28 +82,53 @@ module.exports = {
             // 处理图片
             {
                 test: /\.(png|jpe?g)$/i,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        // 指定图片大小，小于该数据的图片，会被转成base64
-                        limit: 8 * 1024,//8kb
-                        // [name]是图片原名称
-                        // [ext]是图片原后缀名
-                        name: 'image/[name].[ext]',
-                        // url-loader 默认采用 ES modules 规范进行解析，但是 html-loader 引入使用的是 commonJs 规范
-                        // 解决：关闭 url-loader 默认的 ES modules 规范,强制 url-loader 使用 CommonJS 规范打包
-                        esModule: false,
+                // use: {
+                //     loader: 'url-loader',
+                //     options: {
+                //         // 指定图片大小，小于该数据的图片，会被转成base64
+                //         limit: 8 * 1024,//8kb
+                //         // [name]是图片原名称
+                //         // [ext]是图片原后缀名
+                //         name: 'image/[name].[ext]',
+                //         // url-loader 默认采用 ES modules 规范进行解析，但是 html-loader 引入使用的是 commonJs 规范
+                //         // 解决：关闭 url-loader 默认的 ES modules 规范,强制 url-loader 使用 CommonJS 规范打包
+                //         esModule: false,
+                //     }
+                // }
+
+                // 使用资源模块处理
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 8 * 1024
                     }
+                },
+                generator: {
+                    filename: 'image/[name][ext]'
                 }
             },
             // 匹配字体文件
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/i,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: 'fonts/[name].[ext]',
+                // 使用loader处理
+                // use: {
+                //     loader: 'file-loader',
+                //     options: {
+                //         name: 'fonts/[name].[ext]',
+                //     }
+                // }
+                // 使用资源模块处理字体文件
+                // asset可以在 asset/resource 和 asset/inline 之间自动选择
+                // 如果文件小于 8kb，则使用asset/inline
+                // 如果文件大于 8kb，则使用asset/resource
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 8 * 1024
                     }
+                },
+                generator: {
+                    filename: 'fonts/[name][ext]'
                 }
             },
             // 处理html
